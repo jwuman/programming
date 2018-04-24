@@ -1,0 +1,59 @@
+$_ current line
+$. current line number
+
+# this replace the old with new string in file
+perl -pie 's/old/new/g' file
+
+# this replace the old with new string if me is matched in file
+perl -pie 's/old/new/g if /me/' file
+
+# find lines that appears more than once
+perl -ne 'print if $a{$_}++' file
+
+# adding numbers to lines 
+perl -ne 'print "$. $_"' file
+or
+perl -pe '$+ = $. $_"' file
+
+# adding all numbers in each line 
+perl -MList::Util=sum -alne 'print sum @F'
+
+# finding the date 1299 days ago
+perl -MPOSIX -le '@t=localtime; $t[3] -= 1299; print scalar localtime mktime @t'
+
+# generate an eight letter password
+perl -le 'print map { ("a".."z","A".."Z","0".."9")[rand 62] } 1..8'
+
+# adding numbers in the first column
+perl -lane '$sum += $F[0]; END { print $sum }'
+
+# print list of users
+perl -a -F: -lne 'print $F[4]' /etc/passwd
+
+# double space a file
+perl -pe '$\ = "\n"' file
+perl -pe '$_ .= "\n"' file
+perl -pe 's/$/\n/' file #or s/^/\n/ if adding a blank line before each line
+perl -nE 'say' file #5.10 or later
+perl -pe '$_ .= "\n" if /\S/' file #dont double space blank lines
+
+perl -ne 'print unless /^$/' # remove blank lines
+
+
+perl -lpe 's// /g' #today is great -> t o d a y  i s  g r e a t
+perl -lpe 's//:/g' #today is great -> :t:o:d:a:y: :i:s: :g:r:e:a:t:
+
+#number all non-blank lines
+perl -pe '$_ = ++$x." $_" if /./' # or if /\S/
+perl -ne 'print ++$x. " $_" if /./' # and drop empy lines
+perl -pe '$_ = "$. $_" if /./' #count the empty lines but only print numbers with non-blank lines
+
+# print total number of lines in a file
+perl -lne 'END { print $. }'
+perl -le 'print scalar(grep { /./ } <>)' # print the number of non-blank lines
+perl -lne '$x++ if /^$/; END { print $x+o }' # print number of empty lines
+
+#check if a number is a prime number
+perl -lne '(1x$_) !~ /^1?$|^(11+?)\1+$/ && print "$_ is prime"'
+
+
